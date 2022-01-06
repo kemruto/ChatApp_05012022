@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "235133534193",
+    "project_id": "chat-app---05012022",
+    "storage_bucket": "chat-app---05012022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235133534193:android:c4485275b2c11456948e50",
+        "android_client_info": {
+          "package_name": "com.sonnguyen.chatapp_05012022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235133534193-21edraoo0lrg5hnq36ghh7982oh21uid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb8Plgssxn4ixEjRo3oamnEFtKcc_rrc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235133534193-21edraoo0lrg5hnq36ghh7982oh21uid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
