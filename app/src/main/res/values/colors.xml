@@ -10,5 +10,7 @@
 
     <color name="primary_pink">#FFFF5CA1</color>
     <color name="primary_gray">#C3C3C3</color>
+    <color name="headerGray">#D3D3D3</color>
+    <color name="chat_input">#ECECEC</color>
 
 </resources>

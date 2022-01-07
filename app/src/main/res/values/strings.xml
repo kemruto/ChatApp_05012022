@@ -3,4 +3,5 @@
     <string name="label_login">Messenger</string>
     <string name="sign_in_with_gmail">Sign In With Gmail</string>
     <string name="defaul_web_client_id">235133534193-6qhansuldaq95hj8krloot9eud78blgk.apps.googleusercontent.com</string>
+    <string name="type_a_message">Type a message</string>
 </resources>

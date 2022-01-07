@@ -6,14 +6,14 @@ import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_PHOTO_URL;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.RC_SIGN_IN;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.TAG;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -59,7 +59,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void initEvents() {
-        binding.buttonSignIn.setOnClickListener(v->signIn());
+        binding.buttonSignIn.setOnClickListener(v -> signIn());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser!=null){
+        if (currentUser != null) {
             updateUI(currentUser);
             startActivity(signInIntent);
         }
