@@ -1,7 +1,17 @@
 <resources>
     <string name="app_name">Chat App</string>
     <string name="label_login">Messenger</string>
-    <string name="sign_in_with_gmail">Sign In With Gmail</string>
+    <string name="sign_in_with_gmail">Sign In</string>
     <string name="defaul_web_client_id">235133534193-6qhansuldaq95hj8krloot9eud78blgk.apps.googleusercontent.com</string>
     <string name="type_a_message">Type a message</string>
+    <string name="select_user">Select User</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="add_image">Add Image</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">Password</string>
+    <string name="login_with_gmail">Login with gmail</string>
 </resources>

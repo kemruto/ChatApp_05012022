@@ -1,19 +1,19 @@
 package com.sonnguyen.chatapp_05012022;
 
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_EMAIL;
+import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_IMAGE;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_NAME;
-import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_PHOTO_URL;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.RC_SIGN_IN;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.TAG;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,23 +27,27 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.sonnguyen.chatapp_05012022.base.BaseActivity;
 import com.sonnguyen.chatapp_05012022.databinding.ActivitySignInBinding;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends BaseActivity<ActivitySignInBinding> {
 
     private ActivitySignInBinding binding;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private Intent signInIntent;
+    private PreferenceManager preferenceManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected ActivitySignInBinding getBinding() {
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        initEvents();
+        return binding;
+    }
+
+    @Override
+    protected void initData() {
+        preferenceManager = new PreferenceManager(getApplicationContext());
         signInIntent = new Intent(getApplicationContext(), MainActivity.class);
-        initEvents();
         createRequest();
     }
 
@@ -58,13 +62,55 @@ public class SignInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    private void initEvents() {
-        binding.buttonSignIn.setOnClickListener(v -> signIn());
+    @Override
+    protected void initEvents() {
+        binding.textLoginWithGmail.setOnClickListener(v -> signInWithGmail());
+        binding.buttonSignIn.setOnClickListener(v->{
+            if (isValidSignInDetail()){
+                signIn();
+            }
+        });
+        binding.textCreateNewAcount.setOnClickListener(v->{
+            Intent signUpIntent = new Intent(getApplicationContext(),SignUpActivity.class);
+            startActivity(signUpIntent);
+        });
+    }
+
+    private void signIn() {
+        String email = binding.inputEmail.getText().toString();
+        String password = binding.inputPassword.getText().toString();
+        loading(true);
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    updateUI(user);
+                    Intent signInIntent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(signInIntent);
+                }else{
+                    showToast("Sign In Failed: "+task.getException().getMessage());
+                    loading(false);
+                }
+
+            }
+        });
+    }
+
+    private void loading(Boolean isLoading){
+        if(isLoading){
+            binding.buttonSignIn.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+        }else{
+            binding.buttonSignIn.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        loading(false);
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -117,26 +163,40 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        Bundle bundle = new Bundle();
-        if (user != null) {
-            String email = user.getEmail();
-            String displayName = user.getDisplayName();
-            Uri urlPhoto = user.getPhotoUrl();
-            String url = null;
-            if (urlPhoto != null) {
-                url = urlPhoto.toString();
-            }
+        String url = null;
+        Uri urlPhoto = user.getPhotoUrl();
+        if (urlPhoto != null) {
+            url = urlPhoto.toString();
+        }else{
 
-            bundle.putString(KEY_EMAIL, email);
-            bundle.putString(KEY_NAME, displayName);
-            bundle.putString(KEY_PHOTO_URL, url);
-        } else {
-            bundle.putString("NULL", "no value");
         }
-        signInIntent.putExtras(bundle);
+        preferenceManager.putString(KEY_NAME,user.getDisplayName());
+        preferenceManager.putString(KEY_IMAGE,url);
+        preferenceManager.putString(KEY_EMAIL,user.getEmail());
     }
 
-    private void signIn() {
+    private Boolean isValidSignInDetail(){
+        if(binding.inputEmail.getText().toString().trim().isEmpty()){
+            showToast("Enter email");
+            binding.inputEmail.requestFocus();
+            return false;
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()){
+            showToast("Enter valid email");
+            binding.inputEmail.requestFocus();
+            return false;
+        }else if(binding.inputPassword.getText().toString().trim().isEmpty()){
+            showToast("Enter password");
+            binding.inputPassword.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void showToast(String message){
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void signInWithGmail() {
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }

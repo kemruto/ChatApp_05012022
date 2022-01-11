@@ -9,35 +9,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewbinding.ViewBinding;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
-public abstract class BaseFragment<T extends BaseViewModel> extends Fragment {
-    private View mView;
+public abstract class BaseFragment<T extends BaseViewModel,Binding extends ViewBinding> extends Fragment {
     protected T mViewModel;
-    protected Unbinder unbinder;
+    private Binding binding;
+
+    protected abstract Binding getBinding();
+
+    private void initBinding(){
+        this.binding = getBinding();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        mView = null;
-        if (getLayoutId() != 0) {
-            mView = inflater.inflate(getLayoutId(), container, false);
-            unbinder = ButterKnife.bind(this, mView);
-            mViewModel = new ViewModelProvider(this).get(getClassViewModel());
-            initData();
-            initEvents();
-        }
-        return mView;
+        this.initBinding();
+        mViewModel = new ViewModelProvider(this).get(getClassViewModel());
+        initData();
+        initEvents();
+        return binding.getRoot();
     }
 
     protected abstract void initData();
 
     protected abstract void initEvents();
-
-    protected abstract int getLayoutId();
 
     protected abstract Class<T> getClassViewModel();
 

@@ -12,9 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_messenger"
+        android:layout_marginTop="@dimen/_20sdp"
 
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/labelSignIn"/>
 
     <TextView
@@ -31,27 +33,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iconMessenger" />
 
-    <FrameLayout
+    <EditText
+        android:id="@+id/inputEmail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_150sdp"
-        android:animateLayoutChanges="true"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@drawable/input_background"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:hint="@string/email"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="@color/black"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:imeOptions="actionNext"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/labelSignIn">
+        app:layout_constraintTop_toBottomOf="@id/labelSignIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/inputEmail" />
 
-        <ImageView
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="@drawable/ic_google"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/_100sdp"
-            android:translationZ="@dimen/_10ssp"/>
+    <EditText
+        android:id="@+id/inputPassword"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@drawable/input_background"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:hint="@string/password"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="@color/black"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:imeOptions="actionDone"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/frameButtonSignIn" />
+
+    <FrameLayout
+        android:id="@+id/frameButtonSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:layout_marginTop="@dimen/_30sdp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputPassword">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSignIn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
+            android:textSize="@dimen/_15sdp"
             android:text="@string/sign_in_with_gmail"
             android:textStyle="bold"
             app:cornerRadius="@dimen/_8sdp" />
@@ -62,8 +98,48 @@
             android:layout_height="@dimen/_25sdp"
             android:visibility="visible"
             android:layout_gravity="center"/>
-
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/textCreateNewAcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_new_account"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_5sdp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frameButtonSignIn"/>
+
+    <TextView
+        android:id="@+id/textLinhTinh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="or"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_11sdp"
+
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textCreateNewAcount"
+        app:layout_constraintBottom_toTopOf="@id/textLoginWithGmail"/>
+
+    <TextView
+        android:id="@+id/textLoginWithGmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_with_gmail"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textLinhTinh"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

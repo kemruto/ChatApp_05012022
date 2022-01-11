@@ -1,20 +1,14 @@
 package com.sonnguyen.chatapp_05012022;
 
-import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_NAME;
-import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_PHOTO_URL;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.TAG;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sonnguyen.chatapp_05012022.base.BaseActivity;
 import com.sonnguyen.chatapp_05012022.databinding.ActivityMainBinding;
 import com.sonnguyen.chatapp_05012022.listeners.OnActionCallbackFragment;
 import com.sonnguyen.chatapp_05012022.utilities.Constants;
@@ -40,55 +35,43 @@ import java.net.URL;
 
 ;
 
-public class MainActivity extends AppCompatActivity implements OnActionCallbackFragment {
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements OnActionCallbackFragment {
 
     private ActivityMainBinding binding;
-    private String name;
-    private Bitmap bitmapImage;
     private GoogleSignInClient googleSignInClient;
+    private PreferenceManager preferenceManager;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+    protected void initData() {
+        preferenceManager = new PreferenceManager(getApplicationContext());
         EventBus.getDefault().register(this);
-        initData();
-        showConversationFragment();
-    }
-
-    private void showConversationFragment() {
-        ConversationFragment conversationFragment = ConversationFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_NAME, name);
-        bundle.putString(KEY_PHOTO_URL, bitmapImage.toString());
-        conversationFragment.setArguments(bundle);
-        conversationFragment.setCallBack(this);
-        showFragment(binding.hostFragment, conversationFragment, false);
-    }
-
-    private void initData() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.defaul_web_client_id))
                 .requestEmail()
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            name = bundle.getString(KEY_NAME);
-            String photoUrl = bundle.getString(KEY_PHOTO_URL);
-            String bytePhoto = getByteArrayFromImageURL(photoUrl);
-            if (bytePhoto != null) {
-                byte[] bytes = Base64.decode(getByteArrayFromImageURL(photoUrl), Base64.DEFAULT);
-                bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            }
-        }
+        showConversationFragment();
     }
 
-    private String getByteArrayFromImageURL(String url) {
+    @Override
+    protected ActivityMainBinding getBinding() {
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        return binding;
+    }
+
+    private void showConversationFragment() {
+        ConversationFragment conversationFragment = ConversationFragment.newInstance();
+        conversationFragment.setCallBack(this);
+        showFragment(binding.hostFragment, conversationFragment, false);
+    }
+
+    @Override
+    protected void initEvents() {
+
+    }
+
+    private String getStringFromByteArray(String url) {
         URL newurl;
         Bitmap bitmap;
         String base64 = "";
@@ -113,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnActionCallbackF
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.i(Constants.TAG, "Sign out success");
+                preferenceManager.clear();
                 finish();
 
             }
@@ -143,8 +127,9 @@ public class MainActivity extends AppCompatActivity implements OnActionCallbackF
     public void onActionCallback(String key, Object object) {
         switch (key) {
             case Constants.KEY_CONVERSATION_TO_NEW_USER:
-                ChatFragment chatFragment = ChatFragment.newInstance();
-                showFragment(binding.hostFragment, chatFragment, true);
+                UserFragment userFragment = UserFragment.newInstance();
+                userFragment.setCallback(this);
+                showFragment(binding.hostFragment, userFragment, true);
         }
     }
 
