@@ -1,29 +1,31 @@
-package com.sonnguyen.chatapp_05012022;
+package com.sonnguyen.chatapp_05012022.view;
 
+import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_CONVERSATION_TO_NEW_USER;
+import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEYBUNDLE_USER_DATA_TO_CHAT;
+import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_OPEN_USER_INFO;
+import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_USER_TO_MAIN_TO_CHAT;
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.TAG;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sonnguyen.chatapp_05012022.utilities.PreferenceManager;
 import com.sonnguyen.chatapp_05012022.base.BaseActivity;
 import com.sonnguyen.chatapp_05012022.databinding.ActivityMainBinding;
 import com.sonnguyen.chatapp_05012022.listeners.OnActionCallbackFragment;
-import com.sonnguyen.chatapp_05012022.utilities.Constants;
+import com.sonnguyen.chatapp_05012022.model.User;
 import com.sonnguyen.chatapp_05012022.utilities.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,12 +47,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     protected void initData() {
         preferenceManager = new PreferenceManager(getApplicationContext());
         EventBus.getDefault().register(this);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.defaul_web_client_id))
-                .requestEmail()
-                .build();
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
         showConversationFragment();
     }
 
@@ -91,21 +87,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MessageEvent messageEvent) {
+        if (messageEvent.message=="delete account"){
+            showToast("Delete Success");
+        }else{
+            showToast("Signing out.....");
+        }
+        preferenceManager.clear();
         FirebaseAuth.getInstance().signOut();
-        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.i(Constants.TAG, "Sign out success");
-                preferenceManager.clear();
-                finish();
+        Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i(Constants.TAG, "Sign out failed");
-            }
-        });
+    private void showToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void showFragment(FragmentContainerView containerView, Fragment fragment, boolean addToBackStack) {
@@ -126,10 +121,23 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     @Override
     public void onActionCallback(String key, Object object) {
         switch (key) {
-            case Constants.KEY_CONVERSATION_TO_NEW_USER:
+            case KEY_CONVERSATION_TO_NEW_USER:
                 UserFragment userFragment = UserFragment.newInstance();
                 userFragment.setCallback(this);
                 showFragment(binding.hostFragment, userFragment, true);
+                break;
+            case KEY_USER_TO_MAIN_TO_CHAT:
+                User user = (User) object;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(KEYBUNDLE_USER_DATA_TO_CHAT, user);
+                ChatFragment chatFragment = ChatFragment.newInstance();
+                chatFragment.setArguments(bundle);
+                showFragment(binding.hostFragment, chatFragment, true);
+                break;
+            case  KEY_OPEN_USER_INFO:
+                UserInfoFragment userInfoFragment = UserInfoFragment.newInstance();
+                showFragment(binding.hostFragment,userInfoFragment,true);
+                break;
         }
     }
 

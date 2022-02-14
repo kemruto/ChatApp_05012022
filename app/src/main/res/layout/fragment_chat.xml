@@ -6,7 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true"
     android:background="@color/white"
-    tools:context=".ChatFragment">
+    android:id="@+id/itemView"
+    android:touchscreenBlocksFocus="true"
+    tools:context=".view.ChatFragment">
 
     <View
         android:id="@+id/viewBackground"
@@ -36,7 +38,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageBack"
         android:layout_width="@dimen/_30sdp"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_12sdp"
         android:padding="@dimen/_3sdp"
@@ -52,7 +54,7 @@
         android:layout_marginEnd="@dimen/_8sdp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageBack"
@@ -67,7 +69,6 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:overScrollMode="never"
-        android:padding="@dimen/_20sdp"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@id/viewBackground"
@@ -137,7 +138,7 @@
         android:inputType="text"
         android:paddingStart="@dimen/_12sdp"
         android:paddingEnd="@dimen/_16sdp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textColorHint="@color/primary_gray"
 
         app:layout_constraintBottom_toBottomOf="parent"

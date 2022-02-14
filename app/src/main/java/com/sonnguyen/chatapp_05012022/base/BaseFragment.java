@@ -11,9 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewbinding.ViewBinding;
 
+import com.sonnguyen.chatapp_05012022.utilities.PreferenceManager;
+
 public abstract class BaseFragment<T extends BaseViewModel,Binding extends ViewBinding> extends Fragment {
     protected T mViewModel;
     private Binding binding;
+    protected PreferenceManager preferenceManager;
 
     protected abstract Binding getBinding();
 
@@ -25,6 +28,7 @@ public abstract class BaseFragment<T extends BaseViewModel,Binding extends ViewB
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.initBinding();
+        preferenceManager = new PreferenceManager(getContext());
         mViewModel = new ViewModelProvider(this).get(getClassViewModel());
         initData();
         initEvents();

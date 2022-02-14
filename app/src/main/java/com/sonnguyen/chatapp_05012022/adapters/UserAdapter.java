@@ -1,5 +1,8 @@
 package com.sonnguyen.chatapp_05012022.adapters;
 
+import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_USER_TO_CHAT;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -10,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sonnguyen.chatapp_05012022.databinding.ItemContainerUserBinding;
-import com.sonnguyen.chatapp_05012022.listeners.UserListener;
+import com.sonnguyen.chatapp_05012022.listeners.OnActionCallbackFragment;
 import com.sonnguyen.chatapp_05012022.model.User;
 
 import java.util.List;
@@ -18,11 +21,12 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     private List<User> userList;
-    private UserListener userListener;
+    private Context mContext;
+    private OnActionCallbackFragment callbackFragment;
 
-    public UserAdapter(List<User> userList, UserListener userListener) {
+    public UserAdapter(List<User> userList, Context context) {
         this.userList = userList;
-        this.userListener = userListener;
+        this.mContext = context;
     }
 
     @NonNull
@@ -46,7 +50,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return userList.size();
     }
 
-    class UserViewHolder extends RecyclerView.ViewHolder {
+    public void setCallback(OnActionCallbackFragment callbackFragment) {
+        this.callbackFragment = callbackFragment;
+    }
+
+    public class UserViewHolder extends RecyclerView.ViewHolder {
         ItemContainerUserBinding binding;
 
         public UserViewHolder(@NonNull ItemContainerUserBinding itemContainerUserBinding) {
@@ -55,10 +63,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         }
 
         void setUserData(User user) {
-            binding.textName.setText(user.name);
-            binding.textEmail.setText(user.email);
-            binding.imageProfile.setImageBitmap(getUserImage(user.image));
-            binding.getRoot().setOnClickListener(v -> userListener.onUserClicked(user));
+            binding.textName.setText(user.getName());
+            binding.textEmail.setText(user.getEmail());
+            binding.imageProfile.setImageBitmap(getUserImage(user.getImage()));
+            binding.getRoot().setOnClickListener(v ->
+                    callbackFragment.onActionCallback(KEY_USER_TO_CHAT,user)
+//                            Toast.makeText(mContext, "click duoc roi", Toast.LENGTH_SHORT).show()
+            );
         }
     }
 

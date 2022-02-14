@@ -10,16 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatApp_05012022">
         <activity
-            android:name=".SignUpActivity"
+            android:name=".view.SignUpActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.SplashActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".view.SignInActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

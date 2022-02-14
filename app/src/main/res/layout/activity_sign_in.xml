@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity"
+    tools:context=".view.SignInActivity"
     android:padding="@dimen/_24sdp">
 
     <ImageView
@@ -113,33 +113,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frameButtonSignIn"/>
-
-    <TextView
-        android:id="@+id/textLinhTinh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="or"
-        android:textColor="@color/gray"
-        android:textSize="@dimen/_11sdp"
-
-        android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textCreateNewAcount"
-        app:layout_constraintBottom_toTopOf="@id/textLoginWithGmail"/>
-
-    <TextView
-        android:id="@+id/textLoginWithGmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_with_gmail"
-        android:textSize="@dimen/_13sdp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textLinhTinh"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

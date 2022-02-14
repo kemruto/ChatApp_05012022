@@ -1,8 +1,10 @@
-package com.sonnguyen.chatapp_05012022;
+package com.sonnguyen.chatapp_05012022.view;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.sonnguyen.chatapp_05012022.R;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.sonnguyen.chatapp_05012022;
+package com.sonnguyen.chatapp_05012022.utilities;
 
 import static com.sonnguyen.chatapp_05012022.utilities.Constants.KEY_PREFERENCE_NAME;
 
@@ -9,16 +9,6 @@ public class PreferenceManager {
     private final SharedPreferences sharedPreferences;
     public PreferenceManager(Context context){
         sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_NAME,Context.MODE_PRIVATE);
-    }
-
-    public void putBoolean (String key,Boolean value){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(key,value);
-        editor.apply();
-    }
-
-    public Boolean getBoolean(String key){
-        return sharedPreferences.getBoolean(key,false);
     }
 
     public void putString(String key,String value){
